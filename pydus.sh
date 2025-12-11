@@ -27,7 +27,7 @@ DESCRIPTION
 
 SYNTAX
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  $0 [options] <source_directory> <output_directory> [format]
+  pydus [options] <source_directory> <output_directory> [format]
 
 OPTIONS
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -49,10 +49,10 @@ FORMATS
 
 USAGE EXAMPLES
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  $0 ./my_project ./UML/class_diagrams
-  $0 ./my_project ./UML/class_diagrams svg
-  $0 ./my_project ./UML/class_diagrams png
-  $0 -v ./my_project ./UML/class_diagrams pdf
+  pydus ./my_project ./UML/class_diagrams
+  pydus ./my_project ./UML/class_diagrams svg
+  pydus ./my_project ./UML/class_diagrams png
+  pydus -v ./my_project ./UML/class_diagrams pdf
 
   This command will:
     • Recursively scan ./my_project
