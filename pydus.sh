@@ -27,7 +27,12 @@ DESCRIPTION
 
 SYNTAX
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  $0 <source_directory> <output_directory> [format]
+  $0 [options] <source_directory> <output_directory> [format]
+
+OPTIONS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  -v, --verbose       Show detailed output from pyreverse
+  -h, --help          Display this help message
 
 ARGUMENTS
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -47,7 +52,7 @@ USAGE EXAMPLES
   $0 ./my_project ./UML/class_diagrams
   $0 ./my_project ./UML/class_diagrams svg
   $0 ./my_project ./UML/class_diagrams png
-  $0 ./my_project ./UML/class_diagrams pdf
+  $0 -v ./my_project ./UML/class_diagrams pdf
 
   This command will:
     • Recursively scan ./my_project
@@ -59,8 +64,26 @@ EOF
 exit 0
 }
 
-# If no arguments or --help
-if [ -z "$1" ] || [ "$1" = "--help" ] || [ "$1" = "-h" ]; then
+VERBOSE=0
+
+# Parse options
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        -v|--verbose)
+            VERBOSE=1
+            shift
+            ;;
+        -h|--help)
+            print_help
+            ;;
+        *)
+            break
+            ;;
+    esac
+done
+
+# If no arguments
+if [ -z "$1" ]; then
     print_help
 fi
 
@@ -92,10 +115,17 @@ if [ ! -d "$SRCDIR" ]; then
     exit 1
 fi
 
+# Check if pyreverse is installed
+if ! command -v pyreverse &> /dev/null; then
+    echo "ERROR: pyreverse not found. Please install pylint first:"
+    echo "  pip install pylint"
+    exit 1
+fi
+
 mkdir -p "$OUTDIR"
 
 # List Python files (excluding __init__.py)
-FILES=($(find "$SRCDIR" -type f -name "*.py" ! -name "__init__.py"))
+mapfile -d '' FILES < <(find "$SRCDIR" -type f -name "*.py" ! -name "__init__.py" -print0)
 TOTAL=${#FILES[@]}
 COUNT=0
 GENERATED=0
@@ -137,32 +167,45 @@ echo "Source directory    : $SRCDIR"
 echo "Output directory    : $OUTDIR"
 echo "Output format       : $FORMAT"
 echo "Files to process    : $TOTAL"
+echo "Verbose mode        : $([ "$VERBOSE" -eq 1 ] && echo "ON" || echo "OFF")"
 echo ""
 echo "Generating diagrams..."
 echo ""
 
 for file in "${FILES[@]}"; do
     COUNT=$((COUNT + 1))
-    progress_bar $COUNT $TOTAL
+    
+    if [ "$VERBOSE" -eq 0 ]; then
+        progress_bar $COUNT $TOTAL
+    fi
     
     filename=$(basename "$file" .py)
     
     # Check if file contains a class
     if ! grep -Eq "^[[:space:]]*class[[:space:]]+[A-Za-z0-9_]+" "$file"; then
         SKIPPED=$((SKIPPED + 1))
+        [ "$VERBOSE" -eq 1 ] && echo "SKIPPED: $file (no class found)"
         continue
     fi
     
     # Generate diagram
-    pyreverse -o "$FORMAT" -p "$filename" "$file" >/dev/null 2>&1
+    if [ "$VERBOSE" -eq 1 ]; then
+        echo "Processing: $file"
+        pyreverse -o "$FORMAT" -p "$filename" "$file"
+    else
+        pyreverse -o "$FORMAT" -p "$filename" "$file" >/dev/null 2>&1
+    fi
+    
     diagram_original="classes_${filename}.${FORMAT}"
     diagram_target="$OUTDIR/${filename}.${FORMAT}"
     
     if [ -f "$diagram_original" ]; then
         mv "$diagram_original" "$diagram_target"
         GENERATED=$((GENERATED + 1))
+        [ "$VERBOSE" -eq 1 ] && echo "SUCCESS: Generated $diagram_target"
     else
         SKIPPED=$((SKIPPED + 1))
+        [ "$VERBOSE" -eq 1 ] && echo "FAILED: Could not generate diagram for $file"
     fi
 done
 
@@ -171,11 +214,11 @@ echo ""
 echo "╔═══════════════════════════════════════════════════════════════════════════╗"
 echo "║                              SUMMARY                                      ║"
 echo "╠═══════════════════════════════════════════════════════════════════════════╣"
-echo "║  Total Python files      : $TOTAL"                                        
-echo "║  Diagrams generated      : $GENERATED"                                    
-echo "║  Files skipped           : $SKIPPED"                                      
-echo "║  Output format           : $FORMAT"                                       
-echo "║  Source directory        : $SRCDIR"                                       
-echo "║  Output directory        : $OUTDIR"                                       
+printf "║  %-23s : %-47s║\n" "Total Python files" "$TOTAL"
+printf "║  %-23s : %-47s║\n" "Diagrams generated" "$GENERATED"
+printf "║  %-23s : %-47s║\n" "Files skipped" "$SKIPPED"
+printf "║  %-23s : %-47s║\n" "Output format" "$FORMAT"
+printf "║  %-23s : %-47s║\n" "Source directory" "$SRCDIR"
+printf "║  %-23s : %-47s║\n" "Output directory" "$OUTDIR"
 echo "╚═══════════════════════════════════════════════════════════════════════════╝"
 echo ""
