@@ -16,3 +16,20 @@ A lightweight bash tool that automatically generates individual UML class diagra
 ```bash
 pip install pylint
 ```
+### Optional (for PNG and PDF formats)
+- **Graphviz** - Required for PNG and PDF generation
+
+**Ubuntu/Debian:**
+```bash
+sudo apt-get install graphviz
+```
+
+**macOS:**
+```bash
+brew install graphviz
+```
+
+**Windows:**
+```bash
+choco install graphviz
+```
