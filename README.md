@@ -71,3 +71,98 @@ export PATH="$HOME/.local/bin:$PATH"
 # Reload your shell configuration
 source ~/.bashrc  # or source ~/.zshrc
 ```
+
+## Usage
+
+### Basic syntax
+
+```bash
+pydus <source_directory> <output_directory> [format]
+```
+
+### Arguments
+
+- `source_directory` - Root directory containing .py files to analyze
+- `output_directory` - Directory where generated diagrams will be saved
+- `format` - (Optional) Output format: `svg`, `png`, `dot`, or `pdf` (default: `svg`)
+
+### Examples
+
+**Generate SVG diagrams (default):**
+```bash
+pydus ./my_project ./docs/uml
+```
+
+**Generate PNG diagrams:**
+```bash
+pydus ./my_project ./docs/uml png
+```
+
+**Generate PDF diagrams:**
+```bash
+pydus ./my_project ./docs/uml pdf
+```
+
+**Generate DOT files for custom processing:**
+```bash
+pydus ./my_project ./docs/uml dot
+```
+
+**Get help:**
+```bash
+pydus --help
+```
+
+## Output Formats
+
+| Format | Extension | Description | Graphviz Required |
+|--------|-----------|-------------|-------------------|
+| **svg** | `.svg` | Scalable Vector Graphics (recommended) | No |
+| **png** | `.png` | Portable Network Graphics (raster) | Yes |
+| **pdf** | `.pdf` | Portable Document Format | Yes |
+| **dot** | `.dot` | Graphviz DOT format for further processing | No |
+
+## Project Structure Example
+
+### Input structure
+```
+my_project/
+├── models/
+│   ├── user.py          # Contains User class
+│   ├── product.py       # Contains Product class
+│   └── __init__.py      # Automatically skipped
+├── utils/
+│   ├── helpers.py       # Contains Helper class
+│   └── config.py        # No class - skipped
+└── main.py              # No class - skipped
+```
+
+### Output after running `pydus ./my_project ./uml_output svg`
+```
+uml_output/
+├── user.svg
+├── product.svg
+└── helpers.svg
+```
+
+## What Gets Processed
+
+### Included
+- Python files (`.py`) containing one or more class definitions
+- Files in subdirectories (recursive scan)
+- All class types (regular classes, abstract classes, dataclasses, etc.)
+
+### Excluded
+- `__init__.py` files
+- Python scripts without class definitions
+- Non-Python files
+
+## Diagram Content
+
+Each generated diagram includes:
+- Class names
+- Attributes with type annotations
+- Methods with parameters and return types
+- Inheritance relationships
+- Access modifiers (public, private, protected)
+- Class relationships (associations, compositions)
