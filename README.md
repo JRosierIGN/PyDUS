@@ -163,6 +163,3 @@ Each generated diagram includes:
 - Class names
 - Attributes with type annotations
 - Methods with parameters and return types
-- Inheritance relationships
-- Access modifiers (public, private, protected)
-- Class relationships (associations, compositions)
