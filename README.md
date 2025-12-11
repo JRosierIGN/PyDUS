@@ -33,3 +33,41 @@ brew install graphviz
 ```bash
 choco install graphviz
 ```
+## Installation
+
+### Cloning the repository
+Before installing the tool, start by cloning the GitHub repository : 
+
+```bash
+git clone https://github.com/JRosierIGN/PyDUS.git
+cd PyDUS
+```
+
+### Global installation (recommended)
+
+```bash
+# Make the script executable
+chmod +x pydus.sh
+
+# Install globally
+sudo cp pydus.sh /usr/local/bin/pydus
+```
+
+Now you can use `pydus` from anywhere in your system.
+
+### Local installation (without sudo)
+
+```bash
+# Create local bin directory if it doesn't exist
+mkdir -p ~/.local/bin
+
+# Copy and make executable
+cp pydus.sh ~/.local/bin/pydus
+chmod +x ~/.local/bin/pydus
+
+# Add to PATH (add this line to ~/.bashrc or ~/.zshrc)
+export PATH="$HOME/.local/bin:$PATH"
+
+# Reload your shell configuration
+source ~/.bashrc  # or source ~/.zshrc
+```
