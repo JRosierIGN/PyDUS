@@ -16,6 +16,7 @@ A lightweight bash tool that automatically generates individual UML class diagra
 ```bash
 pip install pylint
 ```
+
 ### Optional (for PNG and PDF formats)
 - **Graphviz** - Required for PNG and PDF generation
 
@@ -33,6 +34,7 @@ brew install graphviz
 ```bash
 choco install graphviz
 ```
+
 ## Installation
 
 ### Cloning the repository
@@ -44,7 +46,6 @@ cd PyDUS
 ```
 
 ### Global installation (recommended)
-
 ```bash
 # Make the script executable
 chmod +x pydus.sh
@@ -56,7 +57,6 @@ sudo cp pydus.sh /usr/local/bin/pydus
 Now you can use `pydus` from anywhere in your system.
 
 ### Local installation (without sudo)
-
 ```bash
 # Create local bin directory if it doesn't exist
 mkdir -p ~/.local/bin
@@ -75,13 +75,15 @@ source ~/.bashrc  # or source ~/.zshrc
 ## Usage
 
 ### Basic syntax
-
 ```bash
-pydus <source_directory> <output_directory> [format]
+pydus [options] <source_directory> <output_directory> [format]
 ```
 
-### Arguments
+### Options
+- `-v, --verbose` - Show detailed output from pyreverse during processing
+- `-h, --help` - Display help message with complete documentation
 
+### Arguments
 - `source_directory` - Root directory containing .py files to analyze
 - `output_directory` - Directory where generated diagrams will be saved
 - `format` - (Optional) Output format: `svg`, `png`, `dot`, or `pdf` (default: `svg`)
@@ -108,9 +110,16 @@ pydus ./my_project ./docs/uml pdf
 pydus ./my_project ./docs/uml dot
 ```
 
+**Verbose mode for debugging:**
+```bash
+pydus -v ./my_project ./docs/uml svg
+```
+
 **Get help:**
 ```bash
 pydus --help
+# or
+pydus -h
 ```
 
 ## Output Formats
@@ -149,7 +158,7 @@ uml_output/
 
 ### Included
 - Python files (`.py`) containing one or more class definitions
-- Files in subdirectories (recursive scan)
+- Files in subdirectories
 - All class types (regular classes, abstract classes, dataclasses, etc.)
 
 ### Excluded
@@ -163,3 +172,26 @@ Each generated diagram includes:
 - Class names
 - Attributes with type annotations
 - Methods with parameters and return types
+
+## Troubleshooting
+
+**Error: "pyreverse not found"**
+```bash
+pip install pylint
+```
+
+**PNG/PDF generation fails**
+```bash
+# Install Graphviz (see Requirements section)
+```
+
+**Permission denied**
+```bash
+chmod +x pydus.sh
+```
+
+**Script not found after installation**
+```bash
+# Make sure ~/.local/bin is in your PATH
+echo $PATH | grep ".local/bin"
+```
