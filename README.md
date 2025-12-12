@@ -5,7 +5,7 @@
   <img src="https://img.shields.io/badge/python-3.x-blue?style=for-the-badge&logo=python" alt="Python 3.x">
 </p>
 
-A lightweight bash tool that automatically generates individual UML class diagrams for Python files. Perfect for documentation, code reviews, and understanding project structure at a glance.
+A lightweight bash tool that automatically generates individual UML class diagrams for Python files.
 
 ## Requirements
 
