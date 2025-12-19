@@ -46,6 +46,11 @@ cd PyDUS
 ```
 
 ### Global installation (recommended)
+
+To use pydus from anywhere on your system, follow the instructions below:
+
+**Ubuntu/Debian:**
+
 ```bash
 # Make the script executable
 chmod +x pydus.sh
@@ -54,9 +59,10 @@ chmod +x pydus.sh
 sudo cp pydus.sh /usr/local/bin/pydus
 ```
 
-Now you can use `pydus` from anywhere in your system.
-
 ### Local installation (without sudo)
+
+**Ubuntu/Debian:**
+
 ```bash
 # Create local bin directory if it doesn't exist
 mkdir -p ~/.local/bin
@@ -71,6 +77,19 @@ export PATH="$HOME/.local/bin:$PATH"
 # Reload your shell configuration
 source ~/.bashrc  # or source ~/.zshrc
 ```
+
+**Windows:**
+
+Add the script to the PATH for global access:
+
+1. Place `pydus.bat` in a folder, for example `C:\Program Files\PyDus`
+2. Add this folder to your PATH environment variable:
+   - Open the Start menu, search for **Environment Variables**, and open **Edit the system environment variables**
+   - Click **Environment Variables…**
+   - In the **User variables** section, select **Path** and click **Edit…**
+   - Click **New** and add `C:\Program Files\PyDus`
+   - Click **OK** to close all windows
+
 
 ## Usage
 
